@@ -3,7 +3,18 @@ module TheComments
     extend ActiveSupport::Concern
 
     included do
-      has_many :comcoms, class_name: :Comment, foreign_key: :holder_id
+      has_many :out, :comcoms, model_class: :Comment
+      
+      property :my_draft_comments_count, type: Integer, default: 0
+      property :my_published_comments_count, type: Integer, default: 0
+      property :my_comments_count, type: Integer, default: 0 # my_draft_comments_count + my_published_comments_count
+      
+      # commentable's comments => comcoms (cache counters)
+      # Relation through Comment#holder_id field
+      property :draft_comcoms_count, type: Integer, default: 0
+      property :published_comcoms_count, type: Integer, default: 0
+      property :deleted_comcoms_count, type: Integer, default: 0
+      property :spam_comcoms_count, type: Integer, default: 0
     end
 
     def my_comments; ::Comment.where(user: self); end
