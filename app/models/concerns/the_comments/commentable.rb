@@ -4,7 +4,11 @@ module TheComments
     extend ActiveSupport::Concern
     
     included do
-      has_many :comments, as: :commentable
+      has_many :out, :comments, type: :commentable
+      
+      property :draft_comments_count, type: Integer, default: 0
+      property :published_comments_count, type: Integer, default: 0
+      property :deleted_comments_count, type: Integer, default: 0
 
       # *define_denormalize_flags* - should be placed before title or url builder filters
       before_validation :define_denormalize_flags
